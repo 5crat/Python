@@ -5,12 +5,9 @@
 import requests
 
 
-
-
-# noinspection PyByteLiteral
-class HttpWorker(object):
+class HttpRequest(object):
     """
-        HTTP工作类
+        HTTP Request class
     """
     def __init__(
             self,
@@ -32,7 +29,7 @@ class HttpWorker(object):
 
     def http_request(self):
         """
-            HTTP请求方法
+            HTTP request function
         """
         methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
         if self.method.upper() not in methods:
@@ -44,7 +41,7 @@ class HttpWorker(object):
         return [str(r.status_code), header, r.text]
 
 if __name__ == '__main__':
-    a = HttpWorker('http://www.baidu.com', method="post")
+    a = HttpRequest('http://www.baidu.com', method="post")
     b = a.http_request()
     for i in b:
         print i

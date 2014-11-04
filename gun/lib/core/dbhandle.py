@@ -15,6 +15,4 @@ class DataHandle(object):
         conn = sqlite3.connect(self.db_name)
 
 if __name__ == '__main__':
-    print os.path.dirname(__file__)
-    a={'s':'d'}
-    print dict.__init__(a)
+    pass
