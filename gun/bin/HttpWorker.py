@@ -5,12 +5,13 @@
 import requests
 
 
-#    HTTP工作类
 
+
+# noinspection PyByteLiteral
 class HttpWorker(object):
-    '''
-        构造函数，初始化请求目标，请求模式，以及POST的数据
-    '''
+    """
+        HTTP工作类
+    """
     def __init__(
             self,
             target,
@@ -29,10 +30,10 @@ class HttpWorker(object):
             'Referer': target
         }
 
-    '''
-        HTTP请求方法
-    '''
     def http_request(self):
+        """
+            HTTP请求方法
+        """
         methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
         if self.method.upper() not in methods:
             print r'HTTP请求的方式错误,无法识别该方式： '+ self.method

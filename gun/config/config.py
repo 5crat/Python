@@ -2,4 +2,8 @@
 #-*-coding:utf-8-*-
 #-*-author:scrat-*-
 
-config = {}
+# FingerPrint Rules DB
+FingerPrint = 'config/FingerPrint.db'
+
+# Directory Of Brute Force DB
+DirBruteForce = 'config/DirBruteForce.db'
