@@ -25,7 +25,6 @@ def check_same_value(root, node, value):
     if root.xpath(node):
         return False
     for i in root.xpath(node):
-        print 'ii'
         if i.get('value') == value:
             return True
     return False
