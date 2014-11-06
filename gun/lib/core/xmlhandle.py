@@ -90,7 +90,7 @@ class XmlHandle(object):
         return values
 
 if __name__ == '__main__':
-    a = XmlHandle(filepath='../../payload/payload.xml')
+    a = XmlHandle(filepath='../../payload/fingerprint_rules.xml')
     b = a.getNodesAttr('payload', 'value', parent_node='cms', parent_attr='wordpress')
     for i in b:
         print i

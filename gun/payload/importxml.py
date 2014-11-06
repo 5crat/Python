@@ -39,7 +39,7 @@ def check_same_node(root, node):
         return False
 
 def write_file(data):
-    with open('payload.xml', 'a+') as f:
+    with open('fingerprint_rules.xml', 'a+') as f:
         f.writelines(data)
 
 def main(filepath):
