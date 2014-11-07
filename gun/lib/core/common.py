@@ -28,9 +28,13 @@ def _setPaths():
     paths.TMP_PATH = os.path.join(paths.ROOT_PATH, "tmp")
 
 def _setConfAttribute():
-    conf.url = None
+    conf.target = None
     conf.ip = None
-    conf.port = None
+    conf.port = []
     conf.cookie = None
     conf.useragent = None
-    conf.proxylist = []
+    conf.proxies = []
+    conf.web_method = 'GET'
+    conf.data = None
+    conf.headers = None
+    conf.timeout = 3

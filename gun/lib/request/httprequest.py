@@ -11,34 +11,41 @@ class HttpRequest(object):
     """
     def __init__(
             self,
-            target,
+            target='',
             method='GET',
             data='',
             proxies='',
+            timeout=5,
             useragent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)',
     ):
         self.target = target
         self.method = method
         self.data = data
         self.proxies = proxies
+        self.timeout = timeout
         self.UserAgent = useragent
         self.headers = {
             'User-Agent': self.UserAgent,
-            'Referer': target
+            'Referer': self.target
         }
 
     def http_request(self):
         """
-            HTTP request function
+        http request method
+        :return list {'status_code':...,''header:....,'content':...}
         """
+        if not self.target:
+            return
         methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
         if self.method.upper() not in methods:
             print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
-        r = requests.request(self.method.upper(), self.target, data=self.data, headers=self.headers, proxies=self.proxies)
+        r = requests.request(self.method.upper(), self.target, data=self.data, headers=self.headers,\
+                             proxies=self.proxies, timeout=self.timeout)
         header = ''
+        print r.status_code
         for m in r.headers:
             header += m+':'+r.headers[m] + '\r\n'
-        return [str(r.status_code), header, r.text]
+        return {'status_code': str(r.status_code), 'header': header, 'content':  r.text}
 
 if __name__ == '__main__':
     a = HttpRequest('http://www.baidu.com', method="post")
