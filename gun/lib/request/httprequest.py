@@ -12,14 +12,14 @@ class HttpRequest(object):
     def __init__(
             self,
             target='',
-            method='GET',
+            web_method='GET',
             data='',
             proxies='',
             timeout=5,
             useragent='Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Win64; x64; Trident/6.0)',
     ):
         self.target = target
-        self.method = method
+        self.web_method = web_method
         self.data = data
         self.proxies = proxies
         self.timeout = timeout
@@ -37,18 +37,17 @@ class HttpRequest(object):
         if not self.target:
             return
         methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
-        if self.method.upper() not in methods:
+        if self.web_method.upper() not in methods:
             print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
-        r = requests.request(self.method.upper(), self.target, data=self.data, headers=self.headers,\
+        r = requests.request(self.web_method.upper(), self.target, data=self.data, headers=self.headers,\
                              proxies=self.proxies, timeout=self.timeout)
         header = ''
-        print r.status_code
         for m in r.headers:
             header += m+':'+r.headers[m] + '\r\n'
         return {'status_code': str(r.status_code), 'header': header, 'content':  r.text}
 
 if __name__ == '__main__':
-    a = HttpRequest('http://www.baidu.com', method="post")
+    a = HttpRequest('http://www.baidu.com', web_method="post")
     b = a.http_request()
     for i in b:
         print i
