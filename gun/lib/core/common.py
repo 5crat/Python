@@ -11,15 +11,18 @@ from lib.core.data import conf
 
 
 def init():
-    _setPaths()
-    _setConfAttribute()
+    setPaths()
+    setConfAttribute()
+
+
 def banner():
     """
     Banner info
     """
     print 'This is a big gun!!!\r\n'
 
-def _setPaths():
+
+def setPaths():
     """
     set Environment variable
     :return:
@@ -27,7 +30,8 @@ def _setPaths():
     paths.PAYLOAD_PATH = os.path.join(paths.ROOT_PATH, "payload")
     paths.TMP_PATH = os.path.join(paths.ROOT_PATH, "tmp")
 
-def _setConfAttribute():
+
+def setConfAttribute():
     conf.target = None
     conf.ip = None
     conf.port = []

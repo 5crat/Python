@@ -5,11 +5,11 @@
 import re
 from lib.core.data import conf
 from lib.core.enums import FingerPrintRules
-from lib.core.common import _setConfAttribute
+from lib.core.common import setConfAttribute
 from lib.request.httprequest import HttpRequest
 
 
-class FingerPrint(HttpRequest):
+class WebFingerPrint(HttpRequest):
     def __init__(self):
         HttpRequest.__init__(self)
         self.target = conf.target
@@ -21,10 +21,12 @@ class FingerPrint(HttpRequest):
         self.timeout = conf.timeout
 
     def _get_response(self):
-
-
-        b = HttpRequest.http_request(self)
-        return b
+        """
+        get http response data
+        :return  {'status_code': .., 'header': .., 'content': ..}:
+        """
+        response_data = HttpRequest.http_request(self)
+        return response_data
 
     def check_fingerprint(self):
         data = self._get_response()
@@ -35,6 +37,8 @@ class FingerPrint(HttpRequest):
             tmp_language = re.findall(FingerPrintRules.Language_Regex, header)[0]
             tmp_server = re.findall(FingerPrintRules.WebServer_Regex, header)[0]
             tmp_form = re.findall(FingerPrintRules.From_Regex, content)[0]
+            tmp_title = re.findall(FingerPrintRules.Title_Regex, content)[0]
+            result['title'] = tmp_title
             if tmp_form:
                 if '.php' in tmp_form:
                     result['language'] = 'php'
@@ -61,7 +65,7 @@ class FingerPrint(HttpRequest):
                 if result['language'] == 'UnKnown':
                     if 'tomcat' in tmp_server:
                         result['language'] = 'jsp'
-                    elif 'nginx' in tmp_server:
+                    elif 'nginx' in tmp_server or 'apache' in tmp_server:
                         result['language'] = 'php'
                     elif 'iis' in tmp_server:
                         result['language'] = 'asp'
@@ -70,11 +74,11 @@ class FingerPrint(HttpRequest):
         return result
 
 if __name__ == '__main__':
-    _setConfAttribute()
+    setConfAttribute()
     conf.target = 'http://42.192.0.3:8080/'
     conf.web_method = 'GET'
     conf.timeout = 2
-    a = FingerPrint()
+    a = WebFingerPrint()
     data = a.check_fingerprint()
     print data['language']
     print data['server']

@@ -8,8 +8,8 @@ import time
 import inspect
 from lib.core.data import paths
 from lib.core.common import banner
-from lib.core.common import _setPaths
-from lib.core.common import _setConfAttribute
+from lib.core.common import setPaths
+from lib.core.common import setConfAttribute
 
 
 def modulePath():
@@ -22,8 +22,8 @@ def modulePath():
 def main():
     try:
         paths.ROOT_PATH = modulePath()
-        _setPaths()
-        _setConfAttribute()
+        setPaths()
+        setConfAttribute()
         banner()
         print '[*] starting at %s\n' % time.strftime("%X")
     except KeyboardInterrupt:
