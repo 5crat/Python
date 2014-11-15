@@ -4,6 +4,8 @@
 
 from lib.core.datatype import AttribDict
 
+#PATH
 paths = AttribDict()
 
+#CONF
 conf = AttribDict()

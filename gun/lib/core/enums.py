@@ -4,10 +4,17 @@
 
 
 class FingerPrintRules:
-    Language_Regex = "x-powered-by:(\S*)\s"
-    WebServer_Regex = "server:(\S*)\s"
-    From_Regex = "<form.*?action ?= ?\"(.*?)\""
-    Title_Regex = "<title>.*</title>"
+    LanguageRegex = "x-powered-by:(\S*)\s"
+    WebServerRegex = "server:(\S*)\s"
+    FromRegex = "<form.*?action ?= ?\"(.*?)\""
+    TitleRegex = "<title>.*</title>"
 
 class CmsFingerPrintRules:
-    WordPress_Regex = "<\S* href=\"\S*wp-includes/"
+    WordPressRegex = "<\S* href=\"\S*wp-includes/"
+    #.......
+
+class ResponseHeadersRules:
+
+
+    LengthRegex = "Content-Length:\S*"
+    ContentTypeRules = "Content-Type:\S*"

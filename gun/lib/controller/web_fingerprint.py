@@ -34,10 +34,10 @@ class WebFingerPrint(HttpRequest):
         if data['status_code'] == '200':
             header = data['header'].lower()
             content = data['content'].lower()
-            tmp_language = re.findall(FingerPrintRules.Language_Regex, header)[0]
-            tmp_server = re.findall(FingerPrintRules.WebServer_Regex, header)[0]
-            tmp_form = re.findall(FingerPrintRules.From_Regex, content)[0]
-            tmp_title = re.findall(FingerPrintRules.Title_Regex, content)[0]
+            tmp_language = re.findall(FingerPrintRules.LanguageRegex, header)[0]
+            tmp_server = re.findall(FingerPrintRules.WebServerRegex, header)[0]
+            tmp_form = re.findall(FingerPrintRules.FromRegex, content)[0]
+            tmp_title = re.findall(FingerPrintRules.TitleRegex, content)[0]
             result['title'] = tmp_title
             if tmp_form:
                 if '.php' in tmp_form:
