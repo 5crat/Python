@@ -25,6 +25,3 @@ class DB(object):
 
     def select(self):
         self.cur.execute("")
-
-    def sqlexec(self, sql):
-        return self.cur.execute(sql)
