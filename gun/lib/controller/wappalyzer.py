@@ -4,8 +4,9 @@
 import os
 import re
 import sys
-import urllib
-from urlparse import urlparse
+from lib.core.data import conf
+from lib.core.common import setConfAttribute
+from lib.request.httprequest import HttpRequest
 
 try:
     import json
@@ -32,9 +33,17 @@ class Application(object):
         return min(100, total)
 
 
-class Wappalyzer(object):
+class Wappalyzer(HttpRequest):
 
     def __init__(self, data=None, datafile_path=None):
+        HttpRequest.__init__(self)
+        self.target = conf.target
+        self.web_method = conf.web_method
+        self.data = conf.data
+        self.headers = conf.headers
+        self.proxies = conf.proxies
+        self.UserAgent = conf.useragent
+        self.timeout = conf.timeout
         data = data or self.load_data(datafile_path)
         self.categories = data['categories']
         self.apps = data['apps']
@@ -47,17 +56,19 @@ class Wappalyzer(object):
             data = json.load(f)
         return data
 
-    def analyze(self, url=None, response=None):
-        if not response and not url:
+    def analyze(self, response=None):
+        if not response and not self.target:
             raise ValueError
 
         if not response:
-            response = urllib.urlopen(url)
+            response = HttpRequest.http_request(self)
 
-        url = response.url.split('#')[0]
-        html = response.read()
+        #url = response.url.split('#')[0]
+        html = response['content']
+        headers = response['header']
+        status_code = response['status_code']
         data = {
-            'url': url,
+            'url': self.target,
             'html': html,
             'script': re.findall(r'<script[^>]+src=(?:"|\')([^"\']+)', html, re.I | re.M),
             'meta': dict((n.lower(), v) for n, v in
@@ -65,7 +76,7 @@ class Wappalyzer(object):
                                     re.I | re.M) +
                          [(m2, m1) for m1, m2 in \
                           re.findall('<meta\s+content=["\']([^"\']+)["\'].+?(?:name|property)=["\']([^"\']+)["\']', html,re.I | re.M)]),
-            'headers': dict((n.lower(), v) for n, v in response.info().dict.iteritems()),
+            'headers': dict((n.lower(), v) for n, v in headers.iteritems()),
             'env': None
         }
         detected_apps = {}
@@ -100,7 +111,8 @@ class Wappalyzer(object):
                     print 'error while detecting by %s application %s' % (detection_type, app)
             if application.detected:
                 detected_apps[self.categories[str(application.what)]] = app_name
-
+        detected_apps['status_code'] = status_code
+        detected_apps['html'] = html
         return detected_apps
 
     class Pattern:
@@ -131,10 +143,12 @@ class Wappalyzer(object):
 
 
 if __name__ == '__main__':
+    setConfAttribute()
+    conf.target = 'http://cn.wordpress.org/'
+    conf.web_method = 'GET'
+    conf.timeout = 2
     try:
         w = Wappalyzer(datafile_path='../../payload/apps.json')
-        for key, value in w.analyze(url='http://cn.wordpress.org/').iteritems():
-            print key
-            print value
+        print w.analyze()
     except IndexError:
         print ('Usage: python %s <url>' % sys.argv[0])

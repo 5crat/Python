@@ -41,14 +41,14 @@ class HttpRequest(object):
             print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
         r = requests.request(self.web_method.upper(), self.target, data=self.data, headers=self.headers,\
                              proxies=self.proxies, timeout=self.timeout)
-        header = ''
+        headers = {}
         for m in r.headers:
-            header += m+':'+r.headers[m] + '\r\n'
-        return {'status_code': str(r.status_code), 'header': header, 'content':  r.text}
+            headers[m] = r.headers[m]
+        return {'status_code': str(r.status_code), 'header': headers, 'content':  r.text}
 
 if __name__ == '__main__':
     a = HttpRequest('http://www.baidu.com', web_method="post")
     b = a.http_request()
     for i in b:
-        print i
+        print b[i]
 
