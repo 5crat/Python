@@ -19,10 +19,9 @@ class Application(object):
         self.app = app
         self.confidence = {}
         self.detected = False
-
-    def set_detected(self, pattern, type, value, what, key=None):
+    def set_detected(self, pattern, type, value, key=None):
         self.detected = True
-        self.what = what
+        self.what = self.app['cats'][0]
         self.confidence[
             type + ' ' + (key + ' ' if key else '') + pattern.str] = pattern.confidence
 
@@ -74,14 +73,11 @@ class Wappalyzer(object):
             application = Application(app)
             for detection_type, patterns in app.iteritems():
                 try:
-                    what = None
-                    if detection_type == 'cats':
-                        what = patterns
                     if detection_type in ['url', 'html']:
                         for pattern in self.parse_patterns(patterns):
                             if pattern.regex.search(data[detection_type]):
                                 application.set_detected(
-                                    pattern, detection_type, data[detection_type], what=what)
+                                    pattern, detection_type, data[detection_type])
                     elif detection_type in ['meta', 'headers']:
                         for hm_name, hm_pattern in patterns.iteritems():
                             for pattern in self.parse_patterns(hm_pattern):
@@ -89,13 +85,13 @@ class Wappalyzer(object):
                                     hm_name.lower())
                                 if value and pattern.regex.search(value):
                                     application.set_detected(
-                                        pattern, detection_type, value, hm_name, what=what)
+                                        pattern, detection_type, value, hm_name)
                     elif detection_type in ['script']:
                         for script in data[detection_type]:
                             for pattern in self.parse_patterns(patterns):
                                 if pattern.regex.search(script):
                                     application.set_detected(
-                                        pattern, detection_type, script, what=what)
+                                        pattern, detection_type, script)
                     elif detection_type in ['website', 'excludes', 'cats', 'implies', 'env']:
                         pass
                     else:
@@ -103,7 +99,7 @@ class Wappalyzer(object):
                 except:
                     print 'error while detecting by %s application %s' % (detection_type, app)
             if application.detected:
-                detected_apps[app_name] = application
+                detected_apps[self.categories[str(application.what)]] = app_name
 
         return detected_apps
 
@@ -137,9 +133,8 @@ class Wappalyzer(object):
 if __name__ == '__main__':
     try:
         w = Wappalyzer(datafile_path='../../payload/apps.json')
-        for key,value in w.analyze(url='http://cn.wordpress.org/').iteritems():
-            if value.what in ['generator', 'Server']:
-                print key
-                print value.what
+        for key, value in w.analyze(url='http://cn.wordpress.org/').iteritems():
+            print key
+            print value
     except IndexError:
         print ('Usage: python %s <url>' % sys.argv[0])
