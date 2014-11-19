@@ -34,17 +34,20 @@ class HttpRequest(object):
         http request method
         :return list {'status_code':...,''header:....,'content':...}
         """
-        if not self.target:
-            return
-        methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
-        if self.web_method.upper() not in methods:
-            print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
-        r = requests.request(self.web_method.upper(), self.target, data=self.data, headers=self.headers,\
-                             proxies=self.proxies, timeout=self.timeout)
-        headers = {}
-        for m in r.headers:
-            headers[m] = r.headers[m]
-        return {'status_code': str(r.status_code), 'header': headers, 'content':  r.text}
+        try:
+            if not self.target:
+                return
+            methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
+            if self.web_method.upper() not in methods:
+                print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
+            r = requests.request(self.web_method.upper(), self.target, data=self.data, headers=self.headers,\
+                                 proxies=self.proxies, timeout=self.timeout)
+            headers = {}
+            for m in r.headers:
+                headers[m] = r.headers[m]
+            return {'status_code': str(r.status_code), 'header': headers, 'content':  r.text}
+        except:
+            return None
 
 if __name__ == '__main__':
     a = HttpRequest('http://www.baidu.com', web_method="post")

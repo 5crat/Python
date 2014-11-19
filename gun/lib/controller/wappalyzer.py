@@ -63,57 +63,61 @@ class Wappalyzer(HttpRequest):
         if not response:
             response = HttpRequest.http_request(self)
 
-        #url = response.url.split('#')[0]
-        html = response['content']
-        headers = response['header']
-        status_code = response['status_code']
-        data = {
-            'url': self.target,
-            'html': html,
-            'script': re.findall(r'<script[^>]+src=(?:"|\')([^"\']+)', html, re.I | re.M),
-            'meta': dict((n.lower(), v) for n, v in
-                         re.findall('<meta\s+(?:name|property)=["\']([^"\']+)["\'].+?content=["\']([^"\']+)["\']', html,
-                                    re.I | re.M) +
-                         [(m2, m1) for m1, m2 in \
-                          re.findall('<meta\s+content=["\']([^"\']+)["\'].+?(?:name|property)=["\']([^"\']+)["\']', html,re.I | re.M)]),
-            'headers': dict((n.lower(), v) for n, v in headers.iteritems()),
-            'env': None
-        }
-        detected_apps = {}
-        for app_name, app in self.apps.iteritems():
-            application = Application(app)
-            for detection_type, patterns in app.iteritems():
-                try:
-                    if detection_type in ['url', 'html']:
-                        for pattern in self.parse_patterns(patterns):
-                            if pattern.regex.search(data[detection_type]):
-                                application.set_detected(
-                                    pattern, detection_type, data[detection_type])
-                    elif detection_type in ['meta', 'headers']:
-                        for hm_name, hm_pattern in patterns.iteritems():
-                            for pattern in self.parse_patterns(hm_pattern):
-                                value = data[detection_type].get(
-                                    hm_name.lower())
-                                if value and pattern.regex.search(value):
-                                    application.set_detected(
-                                        pattern, detection_type, value, hm_name)
-                    elif detection_type in ['script']:
-                        for script in data[detection_type]:
+        try:
+
+            html = response['content']
+            headers = response['header']
+            status_code = response['status_code']
+            data = {
+                'url': self.target,
+                'html': html,
+                'script': re.findall(r'<script[^>]+src=(?:"|\')([^"\']+)', html, re.I | re.M),
+                'meta': dict((n.lower(), v) for n, v in
+                             re.findall('<meta\s+(?:name|property)=["\']([^"\']+)["\'].+?content=["\']([^"\']+)["\']', html,
+                                        re.I | re.M) +
+                             [(m2, m1) for m1, m2 in \
+                              re.findall('<meta\s+content=["\']([^"\']+)["\'].+?(?:name|property)=["\']([^"\']+)["\']', html,re.I | re.M)]),
+                'headers': dict((n.lower(), v) for n, v in headers.iteritems()),
+                'env': None
+            }
+            detected_apps = {}
+            for app_name, app in self.apps.iteritems():
+                application = Application(app)
+                for detection_type, patterns in app.iteritems():
+                    try:
+                        if detection_type in ['url', 'html']:
                             for pattern in self.parse_patterns(patterns):
-                                if pattern.regex.search(script):
+                                if pattern.regex.search(data[detection_type]):
                                     application.set_detected(
-                                        pattern, detection_type, script)
-                    elif detection_type in ['website', 'excludes', 'cats', 'implies', 'env']:
-                        pass
-                    else:
-                        raise NotImplementedError
-                except:
-                    print 'error while detecting by %s application %s' % (detection_type, app)
-            if application.detected:
-                detected_apps[self.categories[str(application.what)]] = app_name
-        detected_apps['status_code'] = status_code
-        detected_apps['html'] = html
-        return detected_apps
+                                        pattern, detection_type, data[detection_type])
+                        elif detection_type in ['meta', 'headers']:
+                            for hm_name, hm_pattern in patterns.iteritems():
+                                for pattern in self.parse_patterns(hm_pattern):
+                                    value = data[detection_type].get(
+                                        hm_name.lower())
+                                    if value and pattern.regex.search(value):
+                                        application.set_detected(
+                                            pattern, detection_type, value, hm_name)
+                        elif detection_type in ['script']:
+                            for script in data[detection_type]:
+                                for pattern in self.parse_patterns(patterns):
+                                    if pattern.regex.search(script):
+                                        application.set_detected(
+                                            pattern, detection_type, script)
+                        elif detection_type in ['website', 'excludes', 'cats', 'implies', 'env']:
+                            pass
+                        else:
+                            raise NotImplementedError
+                    except:
+                        print 'error while detecting by %s application %s' % (detection_type, app)
+                if application.detected:
+                    detected_apps[self.categories[str(application.what)]] = app_name
+            detected_apps['status_code'] = status_code
+            detected_apps['html'] = html
+            detected_apps['headers'] = headers
+            return detected_apps
+        except:
+            return None
 
     class Pattern:
 
