@@ -4,7 +4,6 @@
 
 import re
 from lib.core.data import conf
-from lib.core.data import paths
 from lib.core.enums import FingerPrintRules
 from lib.core.common import setConfAttribute
 from lib.controller.wappalyzer import Wappalyzer
@@ -43,7 +42,16 @@ def check_fingerprint():
                 else:
                     result['language'] = 'UnKnown'
         else:
-            result['server'] = 'UnKnown'
+            result['language'] = 'UnKnown'
+        if result['language'] == 'UnKnown':
+            if result['web-servers'].lower() in ['nginx']:
+                result['language'] = 'php'
+            elif result['web-servers'].lower() in ['tomcat']:
+                result['language'] = 'jsp'
+            elif result['web-servers'].lower() in ['iis']:
+                result['language'] = 'asp'
+            else:
+                result['language'] = 'UnKnown'
     return result
 
 if __name__ == '__main__':
@@ -52,6 +60,7 @@ if __name__ == '__main__':
     conf.web_method = 'GET'
     conf.timeout = 2
     data = check_fingerprint()
+    print data['title'][0]
     print data['web-servers']
     print data['language']
     print data['cms']
