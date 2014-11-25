@@ -40,8 +40,14 @@ class HttpRequest(object):
             methods = ['GET', 'POST', 'HEAD', 'OPTIONS', 'PUT', 'DELETE']
             if self.web_method.upper() not in methods:
                 print r'HTTP请求的方式错误,无法识别该方式： '+ self.method
-            r = requests.request(self.web_method.upper(), self.target, data=self.data, headers=self.headers,\
-                                 proxies=self.proxies, timeout=self.timeout)
+
+            r = requests.request(
+                self.web_method.upper(),
+                self.target,
+                data=self.data,
+                headers=self.headers,
+                proxies=self.proxies, timeout=self.timeout
+            )
             headers = {}
             for m in r.headers:
                 headers[m] = r.headers[m]
