@@ -16,22 +16,20 @@ def _setDaemon(thread):
     else:
         thread.setDaemon(True)
 
-def runThreads(numThreads, threadFunction):
+def runThreads(numThreads, threadFunction, *args):
 
     threads = []
 
     if numThreads > MAX_THREADS:
         numThreads = MAX_THREADS
     try:
-        if numThreads > 1:
-            pass
-        else:
+        if numThreads < 1:
             threadFunction()
             return
 
         # start threads
         for numThread in xrange(numThreads):
-            thread = threading.Thread(target=threadFunction, name=str(numThread))
+            thread = threading.Thread(target=threadFunction, name=str(numThread), args=args)
             _setDaemon(thread)
 
             try:

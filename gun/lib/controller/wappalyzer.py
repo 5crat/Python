@@ -59,12 +59,10 @@ class Wappalyzer(HttpRequest):
     def analyze(self, response=None):
         if not response and not self.target:
             raise ValueError
-
+        response = HttpRequest.http_request(self)
         if not response:
-            response = HttpRequest.http_request(self)
-
+            return None
         try:
-
             html = response['content']
             headers = response['header']
             status_code = response['status_code']
@@ -116,7 +114,9 @@ class Wappalyzer(HttpRequest):
             detected_apps['html'] = html
             detected_apps['headers'] = headers
             return detected_apps
-        except:
+        except Exception as e:
+            print e + 'WAPPALYZER'
+            print __file__ + '    find error！'
             return None
 
     class Pattern:
@@ -149,8 +149,6 @@ class Wappalyzer(HttpRequest):
 if __name__ == '__main__':
     setConfAttribute()
     conf.target = 'http://cn.wordpress.org/'
-    conf.web_method = 'GET'
-    conf.timeout = 2
     try:
         w = Wappalyzer(datafile_path='../../payload/apps.json')
         print w.analyze()

@@ -5,6 +5,14 @@
 import os
 import sys
 
+# database config
+DB = {
+    'dbname': 'bank',
+    'username': 'root',
+    'password': '',
+    'port': 3306,
+    'host': 'localhost'
+}
 # platform
 PLATFORM = os.name
 

@@ -41,4 +41,4 @@ def setConfAttribute():
     conf.web_method = 'GET'
     conf.data = None
     conf.headers = None
-    conf.timeout = 3
+    conf.timeout = 10
