@@ -4,9 +4,9 @@
 import os
 import re
 import sys
-from lib.core.data import conf
-from lib.core.common import setConfAttribute
-from lib.request.httprequest import HttpRequest
+from libs.core.data import conf
+from libs.core.common import setConfAttribute
+from libs.request.httprequest import HttpRequest
 
 try:
     import json

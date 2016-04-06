@@ -2,8 +2,8 @@
 # -*-coding:utf-8-*-
 #-*-author:scrat-*-
 
-from lib.core.datatype import AttribDict
-from lib.core.log import LOGGER
+from libs.core.datatype import AttribDict
+#from lib.core.log import LOGGER
 
 #PATH
 paths = AttribDict()
@@ -12,4 +12,4 @@ paths = AttribDict()
 conf = AttribDict()
 
 #log
-logger = LOGGER
+#logger = LOGGER

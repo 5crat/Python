@@ -3,13 +3,13 @@
 #-*-author:scrat-*-
 
 import re
-from lib.core.data import conf
-from lib.core.enums import FingerPrintRules
+from libs.core.data import conf
+from libs.core.enums import FingerPrintRules
 #from lib.core.common import setConfAttribute
-from lib.core.data import logger
-from lib.controller.wappalyzer import Wappalyzer
+from libs.core.data import logger
+from libs.controller.wappalyzer import Wappalyzer
 try:
-    from lib.core.data import paths
+    from libs.core.data import paths
 except Exception as e:
     logger.warning(e)
 

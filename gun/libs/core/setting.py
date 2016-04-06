@@ -7,7 +7,7 @@ import sys
 
 # database config
 DB = {
-    'dbname': 'bank',
+    'dbname': 'gun',
     'username': 'root',
     'password': '',
     'port': 3306,

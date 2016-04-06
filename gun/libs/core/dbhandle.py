@@ -3,7 +3,7 @@
 #-*-author:scrat-*-
 
 import MySQLdb
-from lib.core.setting import DB
+from libs.core.setting import DB
 class DBhandle(object):
 
     def __init__(self):
@@ -23,7 +23,7 @@ class DBhandle(object):
             )
         self.cur = self.conn.cursor()
 
-    def execute(self, sql):
+    def executeSql(self, sql):
         try:
             self.cur.execute(sql)
             return self.cur

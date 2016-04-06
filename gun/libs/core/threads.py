@@ -6,8 +6,8 @@ import time
 import threading
 from thread import error as ThreadError
 
-from lib.core.setting import MAX_THREADS
-from lib.core.setting import PYVERSION
+from libs.core.setting import MAX_THREADS
+from libs.core.setting import PYVERSION
 
 
 def _setDaemon(thread):

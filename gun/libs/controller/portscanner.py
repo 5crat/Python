@@ -4,12 +4,12 @@
 
 
 import nmap
-from lib.core.data import conf
-from lib.core.common import setConfAttribute
+from libs.core.data import conf
+from libs.core.common import setConfAttribute
 from Queue import Queue
 import MySQLdb
-from lib.core.setting import DB
-from lib.core.data import logger
+from libs.core.setting import DB
+from libs.core.data import logger
 
 
 def connectdb():

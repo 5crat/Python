@@ -6,11 +6,13 @@ import os
 import sys
 import time
 import inspect
-from lib.core.data import paths
-from lib.core.common import banner
-from lib.core.common import setPaths
-from lib.core.common import setConfAttribute
+from libs.core.data import paths
+from libs.core.common import banner
+from libs.core.common import setPaths
+from libs.core.common import setConfAttribute
+from libs.plugins.subDomainsBrute.subDomainsBrute import DNSBrute
 
+from libs.core.dbhandle import DBhandle
 
 def modulePath():
     """
@@ -25,13 +27,16 @@ def main():
         setPaths()
         setConfAttribute()
         banner()
-        print '[*] starting at %s\n' % time.strftime("%X")
+
+        db = DBhandle()
+        a = DNSBrute('taikang.com', output=db)
+        a.run()
+        db.close()
+        print '\r\n[*] starting at %s\n' % time.strftime("%X")
     except KeyboardInterrupt:
-        print
-        err_msg = 'User Aborted!'
+        print 'User Aborted!'
     except EOFError:
-        print
-        err_msg = 'Exit!'
+        print 'Exit!'
     except SystemExit:
         pass
     finally:

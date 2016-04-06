@@ -3,11 +3,10 @@
 #-*-author:scrat-*-
 
 import os
-import re
-import sys
 
-from lib.core.data import paths
-from lib.core.data import conf
+
+from libs.core.data import paths
+from libs.core.data import conf
 
 
 def init():

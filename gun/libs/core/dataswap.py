@@ -3,10 +3,10 @@
 #-*-author:scrat-*-
 
 from Queue import Queue
-from lib.core.data import paths
-from lib.core.data import conf
-from lib.core.xmlhandle import XmlHandle
-from lib.core.common import setConfAttribute
+from libs.core.data import paths
+from libs.core.data import conf
+from libs.core.xmlhandle import XmlHandle
+from libs.core.common import setConfAttribute
 
 def _readXml(filename, node_name, parent_node='', parent_attr=''):
     xdoc = XmlHandle(filepath=paths.PAYLOAD_PATH+filename)
