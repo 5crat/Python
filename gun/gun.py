@@ -10,9 +10,8 @@ from libs.core.data import paths
 from libs.core.common import banner
 from libs.core.common import setPaths
 from libs.core.common import setConfAttribute
-from libs.plugins.subDomainsBrute.subDomainsBrute import DNSBrute
-
 from libs.core.dbhandle import DBhandle
+from libs.controller.getdomain import getDomainExec
 
 def modulePath():
     """
@@ -29,8 +28,7 @@ def main():
         banner()
 
         db = DBhandle()
-        a = DNSBrute('taikang.com', output=db)
-        a.run()
+        getDomainExec('taikang.com', save=db)
         db.close()
         print '\r\n[*] starting at %s\n' % time.strftime("%X")
     except KeyboardInterrupt:
